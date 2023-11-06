@@ -32,17 +32,12 @@ body{
     grid-row: auto / span 2;
     grid-column: auto / span 2;
   }
+
   .items>div{
     border: 1px solid rgb(159, 154, 154);
     overflow: hidden;
     border-radius: 15px;
   }
-  
-  .item {
-    position: relative;
-    cursor: pointer;
-  }
-  
   
   @media screen and (min-width: 681px) and (max-width: 980px) {
     .items{

@@ -3,25 +3,66 @@ import { galleryImages } from "../../data/images";
 import { IImage } from "../../interfaces/interface";
 
 const Gallery = () => {
+  // get all data
     const [images, setImages] = useState(galleryImages as IImage[]);
+
+    // store selected item
+    const [dragItem, setDragItem] = useState<IImage | null>(null);
+    const [dragId, setDragId] = useState<string | null>(null);
+    console.log(dragId)
+
+    const handleItemDragStart = (e: React.DragEvent, image: IImage) => {
+      e.dataTransfer.setData("itemId", image.id);
+      setDragItem(image);
+    };
+  
+    const handleItemDragOver = (e: React.DragEvent): void => {
+      e.preventDefault();
+      if (e.target instanceof HTMLElement) {
+        const firstChild = e.target.children[0] as HTMLElement | undefined;
+        if (firstChild?.id) {
+          setDragId(firstChild?.id)
+        }
+      }
+    };
+    const handleItemDrop = (e:React.DragEvent, targetImage:IImage) => {
+      e.preventDefault();
+      const sourceId = e.dataTransfer.getData("itemId");
+      const updatedItem = images.slice();
+      const sourceIndex = images.findIndex(
+        (image) => image.id === sourceId
+      );
+      const targetIndex = images.findIndex(
+        (image) => image.id === targetImage.id
+      );
+
+      updatedItem.splice(sourceIndex, 1);
+      updatedItem.splice(targetIndex, 0, dragItem!);
+  
+      setImages(updatedItem);
+      setDragItem(null);
+      setDragId(null);
+    };
+  
   return (
-    <div className="root-gallery  pb-5 px-2">
-       <div className="items">
+    <div className="pb-6 px-2 root-gallery">
+       <div onDragOver={handleItemDragOver} className="items">
         {images?.map((image) => (
           <div
-            className="item"
+            className="relative cursor-pointer"
             key={image.id}
+            onDrop={(e) => handleItemDrop(e, image)}
           >
             <div
               className="w-full h-full"
+              onDragStart={(e) => handleItemDragStart(e, image)}
               draggable="true"
             >
               <img
                 src={image.img}
-                className={` hover:opacity-[0.5] w-full h-full rounded duration-300 bg-white`}
+                className="w-full bg-white h-full hover:opacity-[0.6]  rounded duration-200"
                 alt={`Image ${image.id}`}
               />
-
             </div>
           </div>
         ))}
