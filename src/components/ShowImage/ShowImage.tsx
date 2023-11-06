@@ -1,10 +1,11 @@
-import { IImage } from "../../interfaces/interface"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const ShowImage = ({image}:{ image: IImage | null; }) => {
-  return (
-    <div className='absolute z-50 left-0 w-full  h-full bg-black top-0 duration-200'>
-    <img className='w-full h-full' src={image?.img} alt="" /> 
-</div>
-  )
-}
-export default ShowImage
+const PreviewImage = ({draggedImage}:any) => {
+    return (
+        <div className='absolute w-full z-50 h-full top-0 duration-300 left-0'>
+        <img className='w-full h-full' src={draggedImage?.image} alt="" /> 
+   </div>
+    );
+};
+
+export default PreviewImage;
